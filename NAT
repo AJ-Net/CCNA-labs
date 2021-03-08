@@ -1,0 +1,38 @@
+STATIC CONFIG
+-----------------
+int giga 0/0
+ip nat inside 
+exit
+int giga 0/1
+ip nat outside 
+
+ip nat inside source static 192.168.1.0 58.20.31.0
+
+
+
+DYNAMIC NAT
+---------------
+
+int giga 0/0
+ip nat inside 
+exit
+int giga 0/1
+ip nat outside 
+
+ip nat pool LAN 58.20.31.0 58.20.31.29 netmask 255.255.255.0
+access-list 10 permit 192.168.1.0 0.0.0.255
+ip nat inside source list 10 pool LAN
+
+
+
+DYNAMIC PAT
+-------------
+
+int giga 0/0
+ip nat inside 
+exit
+int giga 0/1
+ip nat outside 
+
+ip nat inside source list 10 interface serial 0/1 overload
+access-list 10 permit 192.168.1.0 0.0.0.2
